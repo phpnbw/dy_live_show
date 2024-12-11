@@ -1,15 +1,14 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.2
+// @version      1.4
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
 // @match        https://www.douyin.com/*
 // @grant        GM_xmlhttpRequest
 // @license      Copyright phpnbw
-// @downloadURL https://update.greasyfork.org/scripts/520050/%E6%8A%96%E9%9F%B3%E7%9B%B4%E6%92%AD%E9%97%B4%E4%BA%BA%E6%95%B0%E6%98%BE%E7%A4%BA.user.js
-// @updateURL https://update.greasyfork.org/scripts/520050/%E6%8A%96%E9%9F%B3%E7%9B%B4%E6%92%AD%E9%97%B4%E4%BA%BA%E6%95%B0%E6%98%BE%E7%A4%BA.meta.js
+// @connect      dyapi.phpnbw.com
 // ==/UserScript==
 
 (function() {
@@ -21,16 +20,16 @@
 
     function getWebcastId() {
         const currentUrl = window.location.href;
-        
+
         // 如果URL没有变化且已有缓存的webcastId，直接返回缓存值
         if (currentUrl === cachedUrl && cachedWebcastId !== null) {
             console.log('使用缓存的直播间ID:', cachedWebcastId);
             return cachedWebcastId;
         }
-        
+
         // 更新当前URL
         cachedUrl = currentUrl;
-        
+
         // 如果是主页面，直接返回null
         if (currentUrl === 'https://live.douyin.com/' || currentUrl === 'https://live.douyin.com' ||
             currentUrl === 'https://www.douyin.com/follow' || currentUrl === 'https://www.douyin.com/follow/live') {
@@ -38,19 +37,19 @@
             cachedWebcastId = null;
             return null;
         }
-        
+
         // 尝试匹配三种格式的URL
         // 格式1: https://live.douyin.com/613217711064
         // 格式2: https://live.douyin.com/613217711064?from_tab_name=main
         // 格式3: https://www.douyin.com/follow/live/574023227986
         const match = currentUrl.match(/\/(\d+)(?:\?|$)/) || currentUrl.match(/\/live\/(\d+)(?:\?|$)/);
-        
+
         if (match) {
             console.log('找到直播间ID:', match[1]);
             cachedWebcastId = match[1];
             return cachedWebcastId;
         }
-        
+
         console.log('未找到直播间ID');
         cachedWebcastId = null;
         return null;
@@ -98,10 +97,18 @@
             oldDisplay.remove();
         }
 
-        // 创建显示元素
-        const display = document.createElement('div');
+        // 创建显示元素，改用 a 标签
+        const display = document.createElement('a');
         display.id = 'viewer-count-display';
-
+        
+        // 设置链接地址
+        const webcastId = getWebcastId();
+        display.href = `https://douyin.phpnbw.com/?id=${webcastId}`;
+        
+        // 添加悬浮提示
+        display.title = '点击查看详细观看数据统计';
+        
+        // 添加新的样式
         display.style.cssText = `
             display: inline-block;
             background-color: rgba(0, 0, 0, 0.7);
@@ -110,24 +117,37 @@
             border-radius: 5px;
             font-size: 16px;
             z-index: 9999;
+            text-decoration: none;
+            cursor: pointer;
         `;
+        
         if (count !== '未知' && count !== '获取失败') {
             display.textContent = `观看人数: ${count}`;
         }
 
-        // 使用 XPath 找到目标元素
+        // 添加鼠标悬停效果
+        display.addEventListener('mouseover', () => {
+            display.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            display.style.color = '#ff4444';
+        });
+        
+        display.addEventListener('mouseout', () => {
+            display.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            display.style.color = 'red';
+        });
+
+        // 打开新标签页
+        display.target = '_blank';
+
+        // 剩余的定位代码保持不变
         const xpath = "/html/body/div[2]/div[2]/div/main/div[2]/div/div/div/pace-island/div/div/div[1]/div[1]";
         const targetElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
-        console.log('目标元素是否存在:', !!targetElement);
-
         if (targetElement) {
-            console.log('找到目标元素，尝试添加显示');
             targetElement.style.position = 'relative';
             display.style.marginLeft = '10px';
             targetElement.appendChild(display);
         } else {
-            console.log('未找到目标元素，显示在右上角');
             display.style.position = 'fixed';
             display.style.top = '75px';
             display.style.right = '50px';
