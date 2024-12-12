@@ -178,14 +178,21 @@
         // 如果是主页面，直接返回，不执行任何操作
         if (url === 'https://live.douyin.com/' || url === 'https://live.douyin.com' ||  url ==='https://www.douyin.com/follow' ||
             url === 'https://www.douyin.com/follow/live' || url ==='https://www.douyin.com/discover' || url==='https://www.douyin.com/vs'
-        || url==='https://www.douyin.com/series' || url==='https://www.douyin.com/?recommend=1') {
+            || url==='https://www.douyin.com/series' || url==='https://www.douyin.com/recommend=1') {
             console.log('当前是直播主页面，不显示观看人数1');
             return;
         }
 
-        // 只有在不是主页面的情况下才执行更新操作
+        // 清除可能存在的旧定时器
+        if (window.viewerCountTimer) {
+            clearInterval(window.viewerCountTimer);
+        }
+
+        // 设置新的定时器并保存引用
         console.log('开始初始化直播间观看人数显示');
-        setInterval(updateViewerCount, 5000);
+        window.viewerCountTimer = setInterval(updateViewerCount, 4000);
+        
+        // 立即执行一次更新
         updateViewerCount();
     }
 
@@ -196,7 +203,7 @@
         init();
     }
 
-    // 为了处理可能的动态加载情况，也监听 URL 变化
+    // URL 变化监听
     let lastUrl = location.href;
     new MutationObserver(() => {
         const url = location.href;
