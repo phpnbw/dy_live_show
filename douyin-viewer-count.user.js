@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.4
+// @version      1.5
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -42,7 +42,7 @@
         // 格式1: https://live.douyin.com/613217711064
         // 格式2: https://live.douyin.com/613217711064?from_tab_name=main
         // 格式3: https://www.douyin.com/follow/live/574023227986
-        const match = currentUrl.match(/\/(\d+)(?:\?|$)/) || currentUrl.match(/\/live\/(\d+)(?:\?|$)/);
+        const match = currentUrl.match(/\/([a-zA-Z0-9]+)(?:\?|$)/) || currentUrl.match(/\/live\/([a-zA-Z0-9]+)(?:\?|$)/);
 
         if (match) {
             console.log('找到直播间ID:', match[1]);
