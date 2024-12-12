@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.5
+// @version      1.6
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
 // @match        https://www.douyin.com/*
+// @exclude      https://www.douyin.com/channel*
 // @grant        GM_xmlhttpRequest
 // @license      Copyright phpnbw
 // @connect      dyapi.phpnbw.com
@@ -45,9 +46,14 @@
         const match = currentUrl.match(/\/([a-zA-Z0-9]+)(?:\?|$)/) || currentUrl.match(/\/live\/([a-zA-Z0-9]+)(?:\?|$)/);
 
         if (match) {
-            console.log('找到直播间ID:', match[1]);
-            cachedWebcastId = match[1];
-            return cachedWebcastId;
+            if (match[1]==='self' || match[1]==='friend' || match[1]==='discover'){
+                cachedWebcastId = null;
+            }else{
+                console.log('找到直播间ID:', match[1]);
+                cachedWebcastId = match[1];
+                return cachedWebcastId;
+            }
+
         }
 
         console.log('未找到直播间ID');
@@ -171,7 +177,8 @@
         console.log('====================================');
         // 如果是主页面，直接返回，不执行任何操作
         if (url === 'https://live.douyin.com/' || url === 'https://live.douyin.com' ||  url ==='https://www.douyin.com/follow' ||
-            url === 'https://www.douyin.com/follow/live') {
+            url === 'https://www.douyin.com/follow/live' || url ==='https://www.douyin.com/discover' || url==='https://www.douyin.com/vs'
+        || url==='https://www.douyin.com/series' || url==='https://www.douyin.com/?recommend=1') {
             console.log('当前是直播主页面，不显示观看人数1');
             return;
         }
