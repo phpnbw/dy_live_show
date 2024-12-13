@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.7
+// @version      1.8
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -49,9 +49,14 @@
             if (match[1]==='self' || match[1]==='friend' || match[1]==='discover'){
                 cachedWebcastId = null;
             }else{
-                console.log('找到直播间ID:', match[1]);
-                cachedWebcastId = match[1];
-                return cachedWebcastId;
+                if(match[1].length>15){
+                    cachedWebcastId = null;
+                }else{
+                    console.log('找到直播间ID:', match[1]);
+                    cachedWebcastId = match[1];
+                    return cachedWebcastId;
+                }
+
             }
 
         }
