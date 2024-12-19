@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.8
+// @version      1.8.2
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -24,7 +24,7 @@
 
         // 如果URL没有变化且已有缓存的webcastId，直接返回缓存值
         if (currentUrl === cachedUrl && cachedWebcastId !== null) {
-            console.log('使用缓存的直播间ID:', cachedWebcastId);
+            // console.log('使用缓存的直播间ID:', cachedWebcastId);
             return cachedWebcastId;
         }
 
@@ -34,7 +34,7 @@
         // 如果是主页面，直接返回null
         if (currentUrl === 'https://live.douyin.com/' || currentUrl === 'https://live.douyin.com' ||
             currentUrl === 'https://www.douyin.com/follow' || currentUrl === 'https://www.douyin.com/follow/live') {
-            console.log('当前是直播主页面，不显示观看人数');
+            // console.log('当前是直播主页面，不显示观看人数');
             cachedWebcastId = null;
             return null;
         }
@@ -52,7 +52,7 @@
                 if(match[1].length>15){
                     cachedWebcastId = null;
                 }else{
-                    console.log('找到直播间ID:', match[1]);
+                    // console.log('找到直播间ID:', match[1]);
                     cachedWebcastId = match[1];
                     return cachedWebcastId;
                 }
@@ -61,7 +61,7 @@
 
         }
 
-        console.log('未找到直播间ID');
+        // console.log('未找到直播间ID');
         cachedWebcastId = null;
         return null;
     }
@@ -75,15 +75,15 @@
         return new Promise((resolve, reject) => {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}`,
+                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=182`,
                 timeout: 5000,
                 onload: function(response) {
                     try {
                         const data = JSON.parse(response.responseText);
                         // 打印获取到的数据
-                        console.log('API Response:', data);
+                        // console.log('API Response:', data);
                         const viewerCount = data?.data?.data?.data?.[0]?.room_view_stats?.display_value || '未知';
-                        console.log('观看人数:', viewerCount); // 打印观看人数
+                        // console.log('观看人数:', viewerCount); // 打印观看人数
                         resolve(viewerCount);
                     } catch (error) {
                         console.error('解析数据失败:', error);
@@ -172,19 +172,19 @@
             showViewerCount(count);
         } catch (error) {
             console.error('获取观看人数失败:', error);
-            showViewerCount('获取失败');
+            showViewerCount('获取失败,请更新此插件');
         }
     }
 
     function init() {
         const url = window.location.href;
-        console.log('当前URL====================================:', url);
-        console.log('====================================');
+        // console.log('当前URL====================================:', url);
+        // console.log('====================================');
         // 如果是主页面，直接返回，不执行任何操作
         if (url === 'https://live.douyin.com/' || url === 'https://live.douyin.com' ||  url ==='https://www.douyin.com/follow' ||
             url === 'https://www.douyin.com/follow/live' || url ==='https://www.douyin.com/discover' || url==='https://www.douyin.com/vs'
             || url==='https://www.douyin.com/series' || url==='https://www.douyin.com/recommend=1') {
-            console.log('当前是直播主页面，不显示观看人数1');
+            // console.log('当前是直播主页面，不显示观看人数1');
             return;
         }
 
@@ -194,7 +194,7 @@
         }
 
         // 设置新的定时器并保存引用
-        console.log('开始初始化直播间观看人数显示');
+        // console.log('开始初始化直播间观看人数显示');
         window.viewerCountTimer = setInterval(updateViewerCount, 4000);
         
         // 立即执行一次更新
