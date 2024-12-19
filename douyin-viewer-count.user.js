@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.8.3
+// @version      1.8.4
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -75,7 +75,7 @@
         return new Promise((resolve, reject) => {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=183`,
+                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=184`,
                 timeout: 5000,
                 onload: function(response) {
                     try {
@@ -172,7 +172,7 @@
             showViewerCount(count);
         } catch (error) {
             console.error('获取观看人数失败:', error);
-            showViewerCount('获取失败,请更新此插件');
+            // showViewerCount('获取失败,请更新此插件');
         }
     }
 
