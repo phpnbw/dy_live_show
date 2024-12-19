@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.8.2
+// @version      1.8.3
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -75,7 +75,7 @@
         return new Promise((resolve, reject) => {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=182`,
+                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=183`,
                 timeout: 5000,
                 onload: function(response) {
                     try {
@@ -182,8 +182,9 @@
         // console.log('====================================');
         // 如果是主页面，直接返回，不执行任何操作
         if (url === 'https://live.douyin.com/' || url === 'https://live.douyin.com' ||  url ==='https://www.douyin.com/follow' ||
-            url === 'https://www.douyin.com/follow/live' || url ==='https://www.douyin.com/discover' || url==='https://www.douyin.com/vs'
-            || url==='https://www.douyin.com/series' || url==='https://www.douyin.com/recommend=1') {
+            url === 'https://www.douyin.com/follow/live' || url ==='https://www.douyin.com/discover' || url==='https://www.douyin.com/vs'|| 
+            url==='https://www.douyin.com/series' || url==='https://www.douyin.com/recommend=1' || 
+            url.startsWith('https://live.douyin.com/falcon/webcast_douyin')) {
             // console.log('当前是直播主页面，不显示观看人数1');
             return;
         }
