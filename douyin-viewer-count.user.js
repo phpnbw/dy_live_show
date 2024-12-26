@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.8.4
+// @version      1.8.5
 // @description  显示抖音直播间实时观看人数
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -75,7 +75,7 @@
         return new Promise((resolve, reject) => {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=184`,
+                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=185`,
                 timeout: 5000,
                 onload: function(response) {
                     try {
@@ -124,7 +124,7 @@
             display: inline-block;
             background-color: rgba(0, 0, 0, 0.7);
             color: red;
-            padding: 5px 10px;
+            padding: 3px 2px;
             border-radius: 5px;
             font-size: 16px;
             z-index: 9999;
