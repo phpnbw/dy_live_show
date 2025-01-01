@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.8.5
-// @description  显示抖音直播间实时观看人数
+// @version      1.8.6
+// @description  显示抖音直播间实时观看人数，抖音怎么看10万以上在线人数 怎么查看抖音直播间人数 抖音直播粉丝统计平台 抖音直播粉丝 如何查看直播间的粉丝人数 如何查看主播直播数据记录
 // @author       phpnbw
 // @match        https://live.douyin.com/*
 // @match        https://www.douyin.com/*
@@ -32,8 +32,10 @@
         cachedUrl = currentUrl;
 
         // 如果是主页面，直接返回null
-        if (currentUrl === 'https://live.douyin.com/' || currentUrl === 'https://live.douyin.com' ||
-            currentUrl === 'https://www.douyin.com/follow' || currentUrl === 'https://www.douyin.com/follow/live') {
+        if (currentUrl === 'https://live.douyin.com/' || currentUrl === 'https://live.douyin.com' ||  currentUrl ==='https://www.douyin.com/follow' ||
+            currentUrl === 'https://www.douyin.com/follow/live' || currentUrl ==='https://www.douyin.com/discover' || currentUrl==='https://www.douyin.com/vs'|| 
+            currentUrl==='https://www.douyin.com/series' || currentUrl==='https://www.douyin.com/recommend=1' || 
+            currentUrl.startsWith('https://live.douyin.com/falcon/webcast_douyin'))  {
             // console.log('当前是直播主页面，不显示观看人数');
             cachedWebcastId = null;
             return null;
@@ -172,7 +174,11 @@
             showViewerCount(count);
         } catch (error) {
             console.error('获取观看人数失败:', error);
-            // showViewerCount('获取失败,请更新此插件');
+            // 获取失败时移除显示元素
+            const display = document.getElementById('viewer-count-display');
+            if (display) {
+                display.remove();
+            }
         }
     }
 
