@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音直播间人数显示
 // @namespace    https://www.phpnbw.com/
-// @version      1.8.6
+// @version      1.8.7
 // @description  显示抖音直播间实时观看人数，抖音怎么看10万以上在线人数 怎么查看抖音直播间人数 抖音直播粉丝统计平台 抖音直播粉丝 如何查看直播间的粉丝人数 如何查看主播直播数据记录
 // @author       phpnbw
 // @match        https://live.douyin.com/*
@@ -77,7 +77,7 @@
         return new Promise((resolve, reject) => {
             GM_xmlhttpRequest({
                 method: 'GET',
-                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=185`,
+                url: `https://dyapi.phpnbw.com/get_live_room_num?webcast_id=${webcastId}&version=187&platform=tampermonkey`,
                 timeout: 5000,
                 onload: function(response) {
                     try {
